@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+    <title>
+        RZY LOVES QYY
+    </title>
+
+    <meta name="keywords" content="RZY, QYY">
+    <meta name="description" content="RZY LOVES QYY!">
+
+    <link id="pagestyle" href="./assets/css/soft-design-system-pro.min.css?v=1.0.9" rel="stylesheet">
+    <link href="./assets/css/calendar.css" rel="stylesheet">
+    <link href="./assets/css/modification.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
+
+
+</head>
+
+<body class="presentation-page"
+    style="background-image: url('assets/img/bg.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+
+    <header class="header-2">
+
+        <div class="page-header min-vh-75 relative">
+            <span class="mask bg-gradient-bj"></span>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 text-center mx-auto" style="position:relative;">
+                        <div class="text-white pt-3 mt-n5" style="margin: 35px;">
+                            <img src="assets\img\dataImgs\rzy.jpg" alt="" class="text-white tx1" style="border-radius: 50%;width: 100px;height: 100px; 
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);">
+                            <img src="assets\img\dataImgs\qyy.jpg" alt="" class="text-white tx1" style="border-radius: 50%;width: 100px;height: 100px;margin-left: 60px;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);">
+                        </div>
+                        <h1 class="text-white pt-3 mt-n5 tx2">小坡 ❤️ 燕燕</h1>
+                        <p class="lead text-white mt-3">Started from June 9th, 2024.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="position-absolute w-100 z-index-1 bottom-0">
+                <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs>
+                        <path id="gentle-wave"
+                            d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                    </defs>
+                    <g class="moving-waves">
+                        <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40"></use>
+                        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                        <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                        <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                        <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- 恋爱天数模块 -->
+    <section class="pt-3 pb-4" id="count-stats">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
+                    <div class="row">
+                        <div class="col position-relative">
+                            <div class="p-3 text-center">
+                                <h1 class="text-gradient text-primary"> <span id="state1"></span> DAYS</h1>
+                                <h5 class="mt-3">How long have we been in relationship?</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+    <!-- 恋爱日历模块 -->
+    <section class="my-5 py-5" id="calendar_photos">
+        <div class="container">
+            <div class="row">
+                <div class="row justify-content-center text-center my-n1">
+                    <div class="col-lg-6">
+                        <h2 class="text-primary text-gradient" style="font-size: 3.5rem;">恋 爱 日 历</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-sm-5 mt-3" id="calendar">
+            </div>
+        </div>
+
+
+        <!-- 真心话模块 -->
+        <div class="container mt-sm-5 mt-3" style="padding-top: 1.3rem;">
+            <div class="bg-gradient-rizhi position-relative m-3 border-radius-xl shadow-lg">
+                <div class="container pb-lg-8 pb-5 pt-5 postion-relative z-index-2 position-relative">
+                    <div class="row">
+                        <div class="col-md-7 mx-auto">
+                            <h3 class="text-white" style="margin-bottom: 2rem;">Dear 亲爱的邱,</h3>
+                            <p class="text-white" style="font-weight: bold;">"什么叫驯服呀？"</p>
+                            <p class="text-white" style="font-weight: bold;">"这是已经早就被人遗忘了的事情，"狐狸说，"它的意思就是建立联系。"</p>
+                            <p class="text-white" style="font-weight: bold;">"建立联系？"</p>
+                            <p class="text-white" style="font-weight: bold;">
+                                "一点不错，"狐狸说。"对我来说，你还只是一个小男孩，就像其他千万个小男孩一样。我不需要你。你也同样用不着我。对你来说，我也不过是一只狐狸，和其他千万只狐狸一样。但是，如果你驯服了我，我们就互相不可缺少了。对我来说，你就是世界上唯一的了；我对你来说，也是世界上唯一的了。"
+                            </p>
+                            <p class="text-white" style="font-weight: bold;">
+                                "我的生活很单调。我捕捉鸡，而人又捕捉我。所有的鸡全都一样，所有的人也全都一样。因此，我感到有些厌烦了。但是，如果你要是驯服了我，我的生活就一定会是欢快的。我会辨认出一种与众不同的脚步声。其他的脚步声会使我躲到地下去，而你的脚步声就会象音乐一样让我从洞里走出来。再说，你看！你看到那边的麦田没有？我不吃面包，麦子对我来说，一点用也没有。我对麦田无动于衷。而这，真使人扫兴。但是，你有着金黄色的头发。那么，一旦你驯服了我，这就会十分美妙。麦子，是金黄色的，它就会使我想起你。而且，我甚至会喜欢那风吹麦浪的声音……"
+                            </p>
+                            <p class="text-white" style="font-weight: bold;">亲爱的邱，</p>
+                            <p class="text-white" style="font-weight: bold;">你和灿烂的夏一起，笑靥如花，走进我的生活里。</p>
+                            <p class="text-white" style="font-weight: bold;">从遇见你的那天起，你的身影就始终站在我思慕的花海里，亭亭玉立。</p>
+                            <p class="text-white" style="font-weight: bold;">此后的每一天，心花嘭的一声开了，我就知道你来了。</p>
+                            <p class="text-white" style="font-weight: bold;">我闭着眼睛看不见我自己，但是却可以看见你。</p>
+                            <p class="text-white" style="font-weight: bold;">想要拥有，每个有你在的昨天、今天、明天。</p>
+                            <p class="text-white" style="font-weight: bold;">想为你倾其所有，只要你要，只要我有。</p>
+                            <p class="text-white" style="font-weight: bold;">我喜欢你，笨拙而热烈。</p>
+                            <p class="text-white" style="font-weight: bold;">你问我是谁？</p>
+                            <p class="text-white" style="font-weight: bold;">我是一只被你驯服的小狐狸，想要每天躲在麦浪里，看着甜甜的你。</p>
+                            <p class="text-white" style="font-weight: bold;">你会是我从过去到未来，始终的唯一。</p>
+                            <p class="text-white" style="font-weight: bold;">往后的日子有你，我们一起努力。未来可期，余生有你。</p>
+                            <p class="text-white" style="font-weight: bold;">请多关照咯。</p>
+                            <h3 class="text-white" style="text-align: right;">Sincerely,</br>小坡</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 恋爱信息模块 -->
+        <div class="container mt-sm-5 mt-3" style="padding-top: 2rem;">
+            <div class="col" style="border-radius: 10rem">
+                <div class="card shadow-lg mb-5">
+                    <!-- 文章上方波动样式 -->
+                    <div class="card-header bg-gradient-primary p-5 position-relative">
+                        <h3 class="text-white mb-0">LOVE LIST</h3>
+                        <p class="text-white opacity-8 mb-4">简单的我们的生活的乐趣和意义</p>
+                        <div class="position-absolute w-100 z-index-1 bottom-0 ms-n5">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto" style="height:7vh;min-height:50px;">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z">
+                                    </path>
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+
+                    <!-- 文章上方波动样式结尾 -->
+                    <div class="card-body p-5" id="truth_words">
+                        <h2 class="mt-5 mb-3">生活很美好，要一直开心快乐向前看</h2>
+                        <p>单击以下列表可以查看我们的小美好哦</p>
+                        <!-- 恋爱清单 -->
+                        <h2>
+                            <a style="color: cadetblue;" href="assets\plugIn\loveList\loveList.html">恋爱清单</a>
+                        </h2>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 音乐模块 -->
+        <div class="container mt-sm-5 mt-3" style="padding-top: 2rem;">
+            <div class="col" style="border-radius: 10rem">
+                <div class="card shadow-lg mb-5">
+                    <!-- 文章上方波动样式 -->
+                    <div class="card-header bg-gradient-music p-5 position-relative">
+                        <h3 class="text-white mb-0">音 乐</h3>
+                        <p class="text-white opacity-8 mb-4">宝宝爱听的音乐和共同喜欢的音乐</p>
+                        <div class="position-absolute w-100 z-index-1 bottom-0 ms-n5">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto" style="height:7vh;min-height:50px;">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z">
+                                    </path>
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,225,255,0.40"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div style="padding: 0px 30px;margin: 0px;">
+                        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=450
+                            src="//music.163.com/outchain/player?type=0&id=9386683680&auto=1&height=430"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 底层记录模块 -->
+        <div class="container mt-sm-5 mt-3">
+            <div class="row pt-lg-6">
+                <div class="col-lg-3">
+                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
+                        <h3>Records</h3>
+                        <h6 class="text-secondary font-weight-normal pe-3">Some photos can be seen here!</h6>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row mt-3">
+                        <!-- 图片头 -->
+                        <div class="col-md-4">
+                            <span style="cursor: pointer;" onclick="dj()">
+                                <div class="card shadow-lg move-on-hover max-height-160">
+                                    <img class="w-100 m-auto"
+                                        src="assets/img/dataImgs/70dffa270470041b3da1804c2a9d29c3 2.JPG" alt="">
+                                </div>
+                                <div class="mt-2 ms-2">
+                                    <h6 class="mb-0">05.01.2024</h6>
+                                    <p class="text-secondary text-sm">In Quinn 的相册</p>
+                                </div>
+                            </span>
+                        </div>
+                        <!-- 图片尾 -->
+                        <!-- 图片头 -->
+                        <div class="col-md-4">
+                            <span style="cursor: pointer;" onclick="dj()">
+                                <div class="card shadow-lg move-on-hover max-height-160">
+                                    <img class="w-100 m-auto"
+                                        src="assets/img/dataImgs/a12e0c40e2d1ed113f73e9659a034b58.JPG" alt="">
+                                </div>
+                                <div class="mt-2 ms-2">
+                                    <h6 class="mb-0">04.06.2023</h6>
+                                    <p class="text-secondary text-sm">In 记录点滴</p>
+                                </div>
+                            </span>
+                        </div>
+                        <!-- 图片尾 -->
+                        <script>
+                            function dj() {
+                                Swal.fire({
+                                    type: "error",
+                                    title: "暂不公开",
+                                    text: "点滴目前尚未完善，所以暂不公开。(我必须写个好看的相册!!)",
+                                    confirmButtonColor: "#89953F",
+                                    confirmButtonText: "Good",
+                                    // imageUrl:"./images/qq.png",
+                                    // imageWidth: 150,
+                                    // imageHeight: 150
+
+                                })
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </section>
+
+    <script src="./assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+
+    <script src="./assets/js/plugins/countup.min.js"></script>
+
+    <script src="./assets/js/plugins/calendar/core.js"></script>
+    <script src="./assets/js/plugins/calendar/daygrid.js"></script>
+    <script src="./assets/js/plugins/calendar/interaction.js"></script>
+
+    <script src="./assets/js/soft-design-system-pro.min.js?v=1.0.9" type="text/javascript"></script>
+
+    <script src="./assets/js/sakura.js" type="text/javascript"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-46172202-12');
+    </script>
+
+
+    <script>
+        (function () {
+            var a_idx = 0;
+            window.onclick = function (event) {
+                var a = new Array("❤温柔❤", "❤美丽❤", "❤可爱❤", "❤漂亮❤", "❤机灵❤", "❤有气质❤", "❤聪明❤", "❤魔鬼身材❤", "❤温柔❤",
+                    "❤我太喜欢燕燕老师啦❤", "❤脑子里全是你❤", "❤是我爱可爱的乖宝宝❤", "❤要永远喜欢宝宝❤", "❤要一直对宝宝好❤", "❤我爱邱宇燕！！❤", "❤好喜欢你好喜欢你好喜欢你！！❤");
+
+                var heart = document.createElement("b"); //创建b元素
+                heart.onselectstart = new Function('event.returnValue=false'); //防止拖动
+
+                document.body.appendChild(heart).innerHTML = a[a_idx]; //将b元素添加到页面上
+                a_idx = (a_idx + 1) % a.length;
+                heart.style.cssText = "position: fixed;left:-100%;"; //给p元素设置样式
+
+                var f = 16, // 字体大小
+                    x = event.clientX - f / 2, // 横坐标
+                    y = event.clientY - f, // 纵坐标
+                    c = randomColor(), // 随机颜色
+                    a = 1, // 透明度
+                    s = 1.2; // 放大缩小
+
+                var timer = setInterval(function () { //添加定时器
+                    if (a <= 0) {
+                        document.body.removeChild(heart);
+                        clearInterval(timer);
+                    } else {
+                        heart.style.cssText = "font-size:16px;cursor: default;position: fixed;color:" +
+                            c + ";left:" + x + "px;top:" + y + "px;opacity:" + a + ";transform:scale(" +
+                            s + ");";
+
+                        y--;
+                        a -= 0.016;
+                        s += 0.002;
+                    }
+                }, 15)
+
+            }
+            // 随机颜色
+            function randomColor() {
+
+                return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math
+                    .random() * 255)) + ")";
+
+            }
+        }());
+    </script>
+
+    <!-- 主要信息 -->
+    <script type="text/javascript">
+
+        const date1 = new Date("06/09/2024");
+        const date2 = new Date();
+        const Difference_In_Time = date2.getTime() - date1.getTime();
+
+        let Difference_In_Days = 0;
+        if (Difference_In_Time > 0)
+            // Math.floor(Difference_In_Time / (1000 * 3600 * 24));
+            Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+        if (document.getElementById('state1')) {
+            document.getElementById("state1").setAttribute("countTo", Difference_In_Days.toString());
+            document.getElementById("state1").innerHTML = Difference_In_Days.toString();
+            const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+            if (!countUp.error) {
+                countUp.start();
+            } else {
+                console.error(countUp.error);
+            }
+        }
+
+        // calendar
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');  // 获取组件
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid'],
+                defaultDate: '2024-04', // 默认显示的月份
+                aspectRatio: 1.1,//日历的宽比 可以先忽略
+                headerToolbar: { // 日历头部按钮位置
+                    left: '',
+                    center: 'prevYear,prev title next,nextYear',
+                    right: 'today dayGridMonth,timeGridWeek,timeGridDay'
+                },
+
+                //事件点击
+                eventClick: function (info) {
+                    console.log(info.event);
+                    Swal.fire({
+                        title: info.event.title,
+                        text: info.event.rendering,
+                        width: 600,
+                        confirmButtonText: '看完咯',
+                        imageUrl: info.event.borderColor,
+                    })
+                },
+
+                //把右侧today按钮翻译为中文
+                buttonText: {
+                    today: '今天',
+                    month: '月',
+                    week: '周',
+                    day: '日'
+                },
+                events: [
+                    {
+                        title: '一起做了蛋糕',
+                        start: '2024-04-06',
+                        // editable: true,  // 拖动
+                        rendering: 'from 小坡：和邱的first dating 一起做了小酒窝蛋糕 打算把它当成自己的头像www',
+                        borderColor: "assets/img/dataImgs/a12e0c40e2d1ed113f73e9659a034b58.JPG",
+                    },
+                ],
+                // 自定义返回内容
+                eventDataTransform: function (data) {
+                    var date = new Date();
+                    data.title = data.title;
+                    data.start = data.start
+                    //  data.display='background';
+                    return data;
+                },
+
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+
+</html>
