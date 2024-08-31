@@ -21073,16 +21073,22 @@ label {
 }
 
 .bg-gradient-primary {
-  background-image: linear-gradient(310deg, #7928ca, #ff0080);
+  background-image: linear-gradient(to right, #dd8dd8, #f5bda1);
 }
 
 .bg-gradient-music {
   /* background-image: linear-gradient(to right, #f1a8c0, #f8e9f0); */
-  background-image: linear-gradient(to right, #ee8aaa, #f8e3c9);
+  background-image: linear-gradient(to right, #eec9a3, #ef629f);
+}
+
+.bg-gradient-photo {
+  /* background-image: linear-gradient(to right, #f1a8c0, #f8e9f0); */
+  background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
 }
 
 .bg-gradient-rizhi {
-  background-image: linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99);
+  /* background-image: linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99); */
+  background-image: linear-gradient(to right, #f6736b, #934f91);
 }
 
 .bg-gradient-bj {

@@ -221,68 +221,96 @@
 
 
         <!-- 底层记录模块 -->
-        <div class="container mt-sm-5 mt-3">
-            <div class="row pt-lg-6">
-                <div class="col-lg-3">
-                    <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
-                        <h3>Records</h3>
-                        <h6 class="text-secondary font-weight-normal pe-3">Some photos can be seen here!</h6>
+        <div class="container mt-sm-5 mt-3" style="padding-top: 2rem;">
+            <div class="col" style="border-radius: 10rem">
+                <div class="card shadow-lg mb-5">
+                    <!-- 文章上方波动样式 -->
+                    <div class="card-header bg-gradient-photo p-5 position-relative">
+                        <h3 class="text-white mb-0">照 片 墙</h3>
+                        <p class="text-white opacity-8 mb-4">我们的回忆没有皱褶～</p>
+                        <div class="position-absolute w-100 z-index-1 bottom-0 ms-n5">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto" style="height:7vh;min-height:50px;">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z">
+                                    </path>
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,225,255,0.40"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                                </g>
+                            </svg>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="row mt-3">
-                        <!-- 图片头 -->
-                        <div class="col-md-4">
-                            <span style="cursor: pointer;" onclick="dj()">
-                                <div class="card shadow-lg move-on-hover max-height-160">
-                                    <img class="w-100 m-auto"
-                                        src="assets/img/dataImgs/70dffa270470041b3da1804c2a9d29c3 2.JPG" alt="">
-                                </div>
-                                <div class="mt-2 ms-2">
-                                    <h6 class="mb-0">05.01.2024</h6>
-                                    <p class="text-secondary text-sm">In Quinn 的相册</p>
-                                </div>
-                            </span>
+                    <div class="row pt-lg-6">
+                        <div class="col-lg-3">
+                            <div class="position-sticky pb-lg-5 pb-3 mt-lg-0 mt-5 ps-2" style="top: 100px">
+                                <!-- <h3>Records</h3>
+                                <h6 class="text-secondary font-weight-normal pe-3">Some photos can be seen here!</h6> -->
+                            </div>
                         </div>
-                        <!-- 图片尾 -->
-                        <!-- 图片头 -->
-                        <div class="col-md-4">
-                            <span style="cursor: pointer;" onclick="dj()">
-                                <div class="card shadow-lg move-on-hover max-height-160">
-                                    <img class="w-100 m-auto"
-                                        src="assets/img/dataImgs/a12e0c40e2d1ed113f73e9659a034b58.JPG" alt="">
+                        <div class="col-lg-9">
+                            <div class="row mt-3">
+                                <!-- 图片头 -->
+                                <div class="col-md-4">
+                                    <span style="cursor: pointer;" onclick="dj()">
+                                        <div class="card shadow-lg move-on-hover max-height-160">
+                                            <img class="w-100 m-auto"
+                                                src="assets/img/dataImgs/70dffa270470041b3da1804c2a9d29c3 2.JPG" alt="">
+                                        </div>
+                                        <div class="mt-2 ms-2">
+                                            <h6 class="mb-0">05.01.2024</h6>
+                                            <p class="text-secondary text-sm">In Quinn 的相册</p>
+                                        </div>
+                                    </span>
                                 </div>
-                                <div class="mt-2 ms-2">
-                                    <h6 class="mb-0">04.06.2023</h6>
-                                    <p class="text-secondary text-sm">In 记录点滴</p>
+                                <!-- 图片尾 -->
+                                <!-- 图片头 -->
+                                <div class="col-md-4">
+                                    <span style="cursor: pointer;" onclick="dj()">
+                                        <div class="card shadow-lg move-on-hover max-height-160">
+                                            <img class="w-100 m-auto"
+                                                src="assets/img/dataImgs/a12e0c40e2d1ed113f73e9659a034b58.JPG" alt="">
+                                        </div>
+                                        <div class="mt-2 ms-2">
+                                            <h6 class="mb-0">04.06.2023</h6>
+                                            <p class="text-secondary text-sm">In 记录点滴</p>
+                                        </div>
+                                    </span>
                                 </div>
-                            </span>
+                                <!-- 图片尾 -->
+                                <!-- <script>
+                                    function dj() {
+                                        Swal.fire({
+                                            type: "error",
+                                            title: "暂不公开",
+                                            text: "点滴目前尚未完善，所以暂不公开。(我必须写个好看的相册!!)",
+                                            confirmButtonColor: "#89953F",
+                                            confirmButtonText: "Good",
+                                            // imageUrl:"./images/qq.png",
+                                            // imageWidth: 150,
+                                            // imageHeight: 150
+        
+                                        })
+                                    }
+                                </script> -->
+                                <script>
+                                    function dj() {
+                                        window.location.href = "assets/imgs.html";
+                                    }
+                                </script>
+                            </div>
                         </div>
-                        <!-- 图片尾 -->
-                        <script>
-                            function dj() {
-                                Swal.fire({
-                                    type: "error",
-                                    title: "暂不公开",
-                                    text: "点滴目前尚未完善，所以暂不公开。(我必须写个好看的相册!!)",
-                                    confirmButtonColor: "#89953F",
-                                    confirmButtonText: "Good",
-                                    // imageUrl:"./images/qq.png",
-                                    // imageWidth: 150,
-                                    // imageHeight: 150
-
-                                })
-                            }
-                        </script>
-
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
     </section>
 
     <script src="./assets/js/core/bootstrap.min.js" type="text/javascript"></script>
