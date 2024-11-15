@@ -423,7 +423,7 @@
                     console.log(info.event);
                     Swal.fire({
                         title: info.event.title,
-                        text: info.event.rendering,
+                        html: info.event.rendering.replace(/\n/g, '<br>'),
                         width: 600,
                         confirmButtonText: '看完咯',
                         imageUrl: info.event.borderColor,
@@ -458,6 +458,18 @@
                         // editable: true,  // 拖动
                         rendering: 'from 小坡：记录燕燕老师的第一节瑜伽课，也是燕燕老师的第一个教师节',
                         borderColor: "assets/img/dataImgs/24-09-10.jpg",
+                    },
+                    {
+                        title: '唱歌first try',
+                        start: '2024-10-16',
+                        rendering: 'from 燕燕：宝宝唱的水星记 好像唱出了自己的心声',
+                        borderColor: "assets/img/dataImgs/24-10-16.jpg",
+                    },
+                    {
+                        title: '关于小坡吃了一次夜宵之后控制不住这件事',
+                        start: '2024-10-19',
+                        rendering: "from 小坡：自从半夜吃了一次手抓饼，每天晚上都开始犯饿，太罪恶了\nfrom 燕燕：凌晨一点的手抓饼和烤冷面，xuan！",
+                        borderColor: "assets/img/dataImgs/24-10-19.jpg",
                     },
                 ],
                 // 自定义返回内容
