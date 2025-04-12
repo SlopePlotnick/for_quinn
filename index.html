@@ -19,6 +19,85 @@
     <script src="sweetalert2.all.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
 
+    <style>
+        /* 响应式样式 */
+        @media (max-width: 768px) {
+            .header-2 .page-header {
+                min-height: 50vh !important;
+            }
+
+            .tx1 {
+                width: 80px !important;
+                height: 80px !important;
+                margin-left: 0 !important;
+            }
+
+            .tx2 {
+                font-size: 1.5rem !important;
+            }
+
+            .card {
+                margin-bottom: 1rem;
+            }
+
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .col-md-4 {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* 统一主题色 */
+        :root {
+            --primary-color: #ff557d;
+            --secondary-color: #ff8da1;
+            --text-color: #333;
+            --bg-color: #fff;
+        }
+
+        body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .text-gradient {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+
+        /* 统一动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 
 </head>
 
@@ -488,6 +567,22 @@
                         start: '2025-03-09',
                         rendering: "from 燕燕：在一起9个月了 开心！\nfrom 小坡：收到了来自燕燕的吾皇万睡 一只很像七十一的猫猫玩偶 喜欢！谢谢燕燕！",
                         borderColor: "assets/img/dataImgs/25-03-09.jpg",
+                    },
+                    {
+                        title: "小坡给燕燕送的第一束花",
+                        start: "2025-04-08",
+                        rendering: "from 燕燕：第一次收到宝宝给我买的花 挺香的\n from 小坡：希望下次送花不是为了道歉",
+                        borderColor: "assets/img/dataImgs/25-04-08.jpg"
+                    },
+                    {
+                        title: "一张看上去就很开心的图片www",
+                        start: "2025-01-25",
+                        borderColor: "assets/img/dataImgs/25-01-25.jpg"
+                    },
+                    {
+                        title: "在儿童公园玩的时候拍的开心照片",
+                        start: "2025-02-04",
+                        borderColor: "assets/img/dataImgs/25-02-04.jpg"
                     },
                 ],
                 // 自定义返回内容

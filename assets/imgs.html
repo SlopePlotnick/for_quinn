@@ -5,13 +5,44 @@
 	<title>照片墙</title>
 	<style>
 		/* 全局样式 */
+		:root {
+			--primary-color: #ff557d;
+			--secondary-color: #ff8da1;
+			--text-color: #333;
+			--bg-color: #f2f2f2;
+		}
+
 		body {
 			margin: 0;
 			padding: 0;
-			background-color: #f2f2f2;
+			background-color: var(--bg-color);
 			font-family: Arial, sans-serif;
 			font-size: 16px;
-			color: #333;
+			color: var(--text-color);
+		}
+
+		/* 响应式样式 */
+		@media (max-width: 768px) {
+			.wrapper {
+				padding: 10px;
+			}
+
+			.card {
+				flex-basis: 100%;
+				margin-bottom: 15px;
+			}
+
+			.card-content {
+				padding: 10px;
+			}
+
+			.card-title {
+				font-size: 16px;
+			}
+
+			.card-description {
+				font-size: 12px;
+			}
 		}
 
 		/* 图片容器 */
@@ -27,6 +58,7 @@
 			box-sizing: border-box;
 			background-color: #fff;
 			box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
+			border-radius: 15px;
 		}
 
 		/* 单个图片卡片 */
@@ -36,21 +68,28 @@
 			box-sizing: border-box;
 			box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12);
 			overflow: hidden;
+			border-radius: 15px;
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 		}
 
 		/* 图片的显示和居中 */
 		.card img {
 			width: 100%;
-			height: auto;
+			height: 250px;
+			object-fit: cover;
 			display: block;
 			margin: auto;
-			transition: transform .2s ease-in-out;
-			transform: scale(1);
+			transition: transform 0.3s ease;
 		}
 
 		/* 图片悬停效果 */
 		.card:hover img {
-			transform: scale(1.1);
+			transform: scale(1.05);
 		}
 
 		/* 图片标题和描述 */
@@ -64,7 +103,7 @@
 			margin: 0;
 			font-size: 18px;
 			font-weight: bold;
-			color: #333;
+			color: var(--primary-color);
 		}
 
 		.card-description {
@@ -72,33 +111,70 @@
 			font-size: 14px;
 			color: #666;
 		}
+
+		/* 动画效果 */
+		.fade-in {
+			animation: fadeIn 0.5s ease-in;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* 返回按钮 */
+		.back-button {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+			color: white;
+			padding: 10px 20px;
+			border-radius: 25px;
+			text-decoration: none;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+			transition: transform 0.3s ease;
+		}
+
+		.back-button:hover {
+			transform: translateY(-2px);
+		}
 	</style>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
 </head>
 
 <body>
+	<a href="../index.html" class="back-button">返回首页</a>
+
 	<div class="wrapper">
 		<!-- 单个图片卡片 -->
-		<div class="card">
+		<div class="card fade-in">
 			<img src="img\dataImgs\24-04-06.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">图片标题</h3>
-				<p class="card-description">图片描述</p>
+				<h3 class="card-title">第一次约会</h3>
+				<p class="card-description">一起做蛋糕的甜蜜时光</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
 		<!-- 单个图片卡片 -->
-		<div class="card">
+		<div class="card fade-in">
 			<img src="img/dataImgs/24-05-01.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">图片标题</h3>
-				<p class="card-description">图片描述</p>
+				<h3 class="card-title">美好回忆</h3>
+				<p class="card-description">记录我们的点点滴滴</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
 		<!-- 单个图片卡片 -->
-		<div class="card">
+		<div class="card fade-in">
 			<img src="img/dataImgs/24-10-25.jpg" alt="图片描述">
 			<div class="card-content">
 				<h3 class="card-title">唱歌ing的小坡</h3>
@@ -121,6 +197,15 @@
 					width: 600,
 					confirmButtonText: '看完咯',
 					imageUrl: img.attr('src'),
+					imageWidth: '100%',
+					imageAlt: title,
+					background: '#fff',
+					backdrop: `
+						rgba(0,0,0,0.4)
+						url("https://media.giphy.com/media/3o7buirY0g0g0g0g0g/giphy.gif")
+						center top
+						no-repeat
+					`
 				})
 			});
 		});
