@@ -97,6 +97,48 @@
                 opacity: 1;
             }
         }
+
+        /* 日历事件模态框样式 */
+        .event-popup {
+            border-radius: 15px !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1) !important;
+            padding: 20px !important;
+        }
+
+        .event-title {
+            color: #ff557d !important;
+            font-size: 24px !important;
+            font-weight: bold !important;
+            margin-bottom: 20px !important;
+        }
+
+        .event-content {
+            padding: 0 !important;
+        }
+
+        .event-confirm-btn {
+            background: linear-gradient(45deg, #ff557d, #ff8da1) !important;
+            border: none !important;
+            border-radius: 25px !important;
+            padding: 10px 25px !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .event-confirm-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 5px 15px rgba(255, 85, 125, 0.3) !important;
+        }
+
+        .swal2-close {
+            color: #ff557d !important;
+            font-size: 24px !important;
+        }
+
+        .swal2-close:hover {
+            color: #ff8da1 !important;
+        }
     </style>
 
 </head>
@@ -343,21 +385,22 @@
                                             <img class="w-100 m-auto" src="assets/img/dataImgs/24-05-01.JPG" alt="">
                                         </div>
                                         <div class="mt-2 ms-2">
-                                            <h6 class="mb-0">05.01.2024</h6>
-                                            <p class="text-secondary text-sm">In Quinn 的相册</p>
+                                            <h6 class="mb-0">照片墙</h6>
+                                            <p class="text-secondary text-sm">记录点滴</p>
                                         </div>
                                     </span>
                                 </div>
                                 <!-- 图片尾 -->
                                 <!-- 图片头 -->
                                 <div class="col-md-4">
-                                    <span style="cursor: pointer;" onclick="dj()">
+                                    <span style="cursor: pointer;" onclick="checkPassword()">
                                         <div class="card shadow-lg move-on-hover max-height-160">
-                                            <img class="w-100 m-auto" src="assets/img/dataImgs/24-04-06.JPG" alt="">
+                                            <img class="w-100 m-auto" src="assets/img/dataImgs/24-09-09-02.jpg" alt=""
+                                                style="filter: blur(10px);">
                                         </div>
                                         <div class="mt-2 ms-2">
-                                            <h6 class="mb-0">04.06.2023</h6>
-                                            <p class="text-secondary text-sm">In 记录点滴</p>
+                                            <h6 class="mb-0">秘密空间</h6>
+                                            <p class="text-secondary text-sm">放一些有意思的东西www</p>
                                         </div>
                                     </span>
                                 </div>
@@ -380,6 +423,28 @@
                                 <script>
                                     function dj() {
                                         window.location.href = "assets/imgs.html";
+                                    }
+
+                                    function checkPassword() {
+                                        Swal.fire({
+                                            title: '请输入密码',
+                                            input: 'password',
+                                            inputAttributes: {
+                                                autocapitalize: 'off'
+                                            },
+                                            showCancelButton: true,
+                                            confirmButtonText: '确认',
+                                            cancelButtonText: '取消',
+                                            showLoaderOnConfirm: true,
+                                            preConfirm: (password) => {
+                                                if (password === 'xp9174110') {
+                                                    window.location.href = "assets/secretImgs.html";
+                                                } else {
+                                                    Swal.showValidationMessage('密码错误，请重试');
+                                                }
+                                            },
+                                            allowOutsideClick: () => !Swal.isLoading()
+                                        });
                                     }
                                 </script>
                             </div>
@@ -502,10 +567,32 @@
                     console.log(info.event);
                     Swal.fire({
                         title: info.event.title,
-                        html: info.event.rendering.replace(/\n/g, '<br>'),
+                        html: `
+                            <div class="event-modal">
+                                <div class="event-image">
+                                    <img src="${info.event.borderColor}" alt="Event Image" style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                                </div>
+                                <div class="event-content" style="text-align: left; padding: 0 10px;">
+                                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin: 0;">${info.event.rendering.replace(/\n/g, '<br>')}</p>
+                                </div>
+                            </div>
+                        `,
                         width: 600,
                         confirmButtonText: '看完咯',
-                        imageUrl: info.event.borderColor,
+                        showCloseButton: true,
+                        customClass: {
+                            popup: 'event-popup',
+                            title: 'event-title',
+                            content: 'event-content',
+                            confirmButton: 'event-confirm-btn'
+                        },
+                        background: '#fff',
+                        backdrop: `
+                            rgba(0,0,0,0.4)
+                            url("assets/img/heart.gif")
+                            center top
+                            no-repeat
+                        `
                     })
                 },
 
@@ -583,6 +670,11 @@
                         title: "在儿童公园玩的时候拍的开心照片",
                         start: "2025-02-04",
                         borderColor: "assets/img/dataImgs/25-02-04.jpg"
+                    },
+                    {
+                        title: "我们两个天下第一好www",
+                        start: "2025-02-03",
+                        borderColor: "assets/img/dataImgs/25-02-03.jpg"
                     },
                 ],
                 // 自定义返回内容

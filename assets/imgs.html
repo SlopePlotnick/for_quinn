@@ -9,40 +9,46 @@
 			--primary-color: #ff557d;
 			--secondary-color: #ff8da1;
 			--text-color: #333;
-			--bg-color: #f2f2f2;
+			--bg-color: #fff;
 		}
 
 		body {
 			margin: 0;
 			padding: 0;
-			background-color: var(--bg-color);
+			background-color: #f2f2f2;
 			font-family: Arial, sans-serif;
 			font-size: 16px;
 			color: var(--text-color);
 		}
 
-		/* 响应式样式 */
-		@media (max-width: 768px) {
-			.wrapper {
-				padding: 10px;
-			}
+		/* 返回按钮样式 */
+		.back-button {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			z-index: 1000;
+			background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+			color: white;
+			padding: 10px 20px;
+			border-radius: 25px;
+			text-decoration: none;
+			font-weight: bold;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
 
-			.card {
-				flex-basis: 100%;
-				margin-bottom: 15px;
-			}
+		.back-button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+			color: white;
+		}
 
-			.card-content {
-				padding: 10px;
-			}
-
-			.card-title {
-				font-size: 16px;
-			}
-
-			.card-description {
-				font-size: 12px;
-			}
+		.back-button::before {
+			content: "←";
+			font-size: 18px;
 		}
 
 		/* 图片容器 */
@@ -56,9 +62,10 @@
 			align-items: stretch;
 			padding: 20px;
 			box-sizing: border-box;
-			background-color: #fff;
+			background-color: var(--bg-color);
 			box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
 			border-radius: 15px;
+			margin-top: 20px;
 		}
 
 		/* 单个图片卡片 */
@@ -69,34 +76,46 @@
 			box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12);
 			overflow: hidden;
 			border-radius: 15px;
-			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			transition: transform 0.3s ease;
+			background: var(--bg-color);
+			display: flex;
+			flex-direction: column;
+			height: 400px;
+			/* 设置固定高度 */
 		}
 
 		.card:hover {
 			transform: translateY(-5px);
-			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 		}
 
 		/* 图片的显示和居中 */
 		.card img {
 			width: 100%;
-			height: 250px;
+			height: 300px;
+			/* 设置固定高度 */
 			object-fit: cover;
+			/* 保持图片比例并填充容器 */
 			display: block;
 			margin: auto;
-			transition: transform 0.3s ease;
+			transition: transform .2s ease-in-out;
+			transform: scale(1);
 		}
 
 		/* 图片悬停效果 */
 		.card:hover img {
-			transform: scale(1.05);
+			transform: scale(1.1);
 		}
 
 		/* 图片标题和描述 */
 		.card-content {
 			padding: 15px;
 			text-align: center;
-			background-color: #fff;
+			background-color: var(--bg-color);
+			flex: 1;
+			/* 让内容区域填充剩余空间 */
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
 
 		.card-title {
@@ -112,39 +131,51 @@
 			color: #666;
 		}
 
-		/* 动画效果 */
-		.fade-in {
-			animation: fadeIn 0.5s ease-in;
+		/* 页面标题 */
+		.page-title {
+			text-align: center;
+			margin: 40px 0 20px;
+			color: var(--primary-color);
+			font-size: 2.5rem;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 		}
 
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-				transform: translateY(20px);
+		/* 页面副标题 */
+		.page-subtitle {
+			text-align: center;
+			margin-bottom: 30px;
+			color: #666;
+			font-size: 1.2rem;
+		}
+
+		/* 响应式布局 */
+		@media (max-width: 768px) {
+			.card {
+				flex-basis: calc((100% / 2) - 20px);
+				height: 350px;
 			}
 
-			to {
-				opacity: 1;
-				transform: translateY(0);
+			.card img {
+				height: 250px;
 			}
 		}
 
-		/* 返回按钮 */
-		.back-button {
-			position: fixed;
-			top: 20px;
-			left: 20px;
-			background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-			color: white;
-			padding: 10px 20px;
-			border-radius: 25px;
-			text-decoration: none;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-			transition: transform 0.3s ease;
-		}
+		@media (max-width: 480px) {
+			.card {
+				flex-basis: 100%;
+				height: 300px;
+			}
 
-		.back-button:hover {
-			transform: translateY(-2px);
+			.card img {
+				height: 200px;
+			}
+
+			.back-button {
+				top: 10px;
+				left: 10px;
+				padding: 8px 15px;
+				font-size: 14px;
+			}
 		}
 	</style>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
@@ -153,28 +184,29 @@
 
 <body>
 	<a href="../index.html" class="back-button">返回首页</a>
-
+	<h1 class="page-title">照片墙</h1>
+	<p class="page-subtitle">我们的回忆没有皱褶～</p>
 	<div class="wrapper">
 		<!-- 单个图片卡片 -->
-		<div class="card fade-in">
+		<div class="card">
 			<img src="img\dataImgs\24-04-06.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">第一次约会</h3>
-				<p class="card-description">一起做蛋糕的甜蜜时光</p>
+				<h3 class="card-title">图片标题</h3>
+				<p class="card-description">图片描述</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
 		<!-- 单个图片卡片 -->
-		<div class="card fade-in">
+		<div class="card">
 			<img src="img/dataImgs/24-05-01.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">美好回忆</h3>
-				<p class="card-description">记录我们的点点滴滴</p>
+				<h3 class="card-title">图片标题</h3>
+				<p class="card-description">图片描述</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
 		<!-- 单个图片卡片 -->
-		<div class="card fade-in">
+		<div class="card">
 			<img src="img/dataImgs/24-10-25.jpg" alt="图片描述">
 			<div class="card-content">
 				<h3 class="card-title">唱歌ing的小坡</h3>
@@ -197,15 +229,12 @@
 					width: 600,
 					confirmButtonText: '看完咯',
 					imageUrl: img.attr('src'),
-					imageWidth: '100%',
-					imageAlt: title,
-					background: '#fff',
-					backdrop: `
-						rgba(0,0,0,0.4)
-						url("https://media.giphy.com/media/3o7buirY0g0g0g0g0g/giphy.gif")
-						center top
-						no-repeat
-					`
+					background: 'var(--bg-color)',
+					confirmButtonColor: 'var(--primary-color)',
+					customClass: {
+						title: 'text-gradient',
+						content: 'text-gradient'
+					}
 				})
 			});
 		});
