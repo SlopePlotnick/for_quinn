@@ -88,7 +88,8 @@
 		}
 
 		/* 图片的显示和居中 */
-		.card img {
+		.card img,
+		.card video {
 			width: 100%;
 			height: 300px;
 			/* 设置固定高度 */
@@ -101,7 +102,8 @@
 		}
 
 		/* 图片悬停效果 */
-		.card:hover img {
+		.card:hover img,
+		.card:hover video {
 			transform: scale(1.1);
 		}
 
@@ -155,7 +157,8 @@
 				margin: 10px;
 			}
 
-			.card img {
+			.card img,
+			.card video {
 				height: 280px;
 			}
 
@@ -183,7 +186,8 @@
 				height: 350px;
 			}
 
-			.card img {
+			.card img,
+			.card video {
 				height: 240px;
 			}
 
@@ -218,12 +222,18 @@
 	<h1 class="page-title">照片墙</h1>
 	<p class="page-subtitle">我们的回忆没有皱褶～</p>
 	<div class="wrapper">
+		<div class="card">
+			<img src="img/dataImgs/25-04-18-01.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">相册封面</h3>
+			</div>
+		</div>
 		<!-- 单个图片卡片 -->
 		<div class="card">
 			<img src="img\dataImgs\24-04-06.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">图片标题</h3>
-				<p class="card-description">图片描述</p>
+				<h3 class="card-title">一起做了小酒窝蛋糕</h3>
+				<p class="card-description">第一次约会～</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
@@ -231,8 +241,8 @@
 		<div class="card">
 			<img src="img/dataImgs/24-05-01.JPG" alt="图片描述">
 			<div class="card-content">
-				<h3 class="card-title">图片标题</h3>
-				<p class="card-description">图片描述</p>
+				<h3 class="card-title">漂亮的燕燕宝宝</h3>
+				<p class="card-description">最最最喜欢了</p>
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
@@ -245,21 +255,125 @@
 			</div>
 		</div>
 		<!-- End 单个图片卡片 -->
+		<div class="card">
+			<img src="img/dataImgs/24-10-21.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">会比耶的人型玩偶</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-11-07-01.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">大型沙发摆件</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-11-07-02.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">玩具娃娃呀</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-11-10.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">给燕燕宝宝吹头发</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-12-07.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">跟坡爸坡妈在东湖散步的时候背后偷拍的</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-12-08-01.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">坡妈送的向日葵</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-12-08-02.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">跟坡爸坡妈一起逛山姆超市</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/24-12-15.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">燕燕跟小坡一家三口一起爬山</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/25-02-08.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">燕燕的手机壁纸</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/25-04-18-02.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">蜜汁截图1</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/25-04-18-03.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">蜜汁截图2</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/25-04-18-04.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">蜜汁截图3</h3>
+			</div>
+		</div>
+		<div class="card">
+			<img src="img/dataImgs/25-04-18-05.jpg" alt="图片描述">
+			<div class="card-content">
+				<h3 class="card-title">蜜汁截图4</h3>
+			</div>
+		</div>
+		<div class="card">
+			<video>
+				<source src="video/VID_20240911_211236.mp4" type="video/mp4">
+			</video>
+			<div class="card-content">
+				<h3 class="card-title">宜昌腾格尔</h3>
+				<!-- <p class="card-description">视频描述</p> -->
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$(".card img").click(function (event) {
-				var img = $(this);
-				var card = img.closest('.card');
+			$(".card img, .card video").click(function (event) {
+				var media = $(this);
+				var card = media.closest('.card');
 				var title = card.find('.card-title').text();
 				var description = card.find('.card-description').text();
+				var isVideo = media.is('video');
+
+				let mediaContent;
+				if (isVideo) {
+					mediaContent = `
+						<video controls style="max-width: 100%; border-radius: 10px;">
+							<source src="${media.find('source').attr('src')}" type="video/mp4">
+							您的浏览器不支持视频播放。
+						</video>`;
+				} else {
+					mediaContent = `<img src="${media.attr('src')}" style="max-width: 100%; border-radius: 10px;">`;
+				}
+
 				Swal.fire({
 					title: title,
-					text: description,
+					html: `
+						<div style="margin-bottom: 20px;">
+							${mediaContent}
+						</div>
+						<p style="color: #666;">${description}</p>
+					`,
 					width: 600,
 					confirmButtonText: '看完咯',
-					imageUrl: img.attr('src'),
 					background: 'var(--bg-color)',
 					confirmButtonColor: 'var(--primary-color)',
 					customClass: {
