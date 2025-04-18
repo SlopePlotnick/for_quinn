@@ -382,7 +382,7 @@
                                 <div class="col-md-4">
                                     <span style="cursor: pointer;" onclick="dj()">
                                         <div class="card shadow-lg move-on-hover max-height-160">
-                                            <img class="w-100 m-auto" src="assets/img/dataImgs/24-05-01.JPG" alt="">
+                                            <img class="w-100 m-auto" src="assets/img/dataImgs/25-04-18-01.jpg" alt="">
                                         </div>
                                         <div class="mt-2 ms-2">
                                             <h6 class="mb-0">照片墙</h6>
@@ -404,22 +404,6 @@
                                         </div>
                                     </span>
                                 </div>
-                                <!-- 图片尾 -->
-                                <!-- <script>
-                                    function dj() {
-                                        Swal.fire({
-                                            type: "error",
-                                            title: "暂不公开",
-                                            text: "点滴目前尚未完善，所以暂不公开。(我必须写个好看的相册!!)",
-                                            confirmButtonColor: "#89953F",
-                                            confirmButtonText: "Good",
-                                            // imageUrl:"./images/qq.png",
-                                            // imageWidth: 150,
-                                            // imageHeight: 150
-        
-                                        })
-                                    }
-                                </script> -->
                                 <script>
                                     function dj() {
                                         window.location.href = "assets/imgs.html";
@@ -565,13 +549,26 @@
                 //事件点击
                 eventClick: function (info) {
                     console.log(info.event);
+                    let mediaContent = '';
+                    if (info.event.borderColor.endsWith('.mp4')) {
+                        mediaContent = `
+                            <div class="event-video">
+                                <video controls style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                                    <source src="${info.event.borderColor}" type="video/mp4">
+                                    您的浏览器不支持视频播放。
+                                </video>
+                            </div>`;
+                    } else {
+                        mediaContent = `
+                            <div class="event-image">
+                                <img src="${info.event.borderColor}" alt="Event Image" style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                            </div>`;
+                    }
                     Swal.fire({
                         title: info.event.title,
                         html: `
                             <div class="event-modal">
-                                <div class="event-image">
-                                    <img src="${info.event.borderColor}" alt="Event Image" style="max-width: 100%; border-radius: 10px; margin-bottom: 15px;">
-                                </div>
+                                ${mediaContent}
                                 <div class="event-content" style="text-align: left; padding: 0 10px;">
                                     <p style="color: #666; font-size: 16px; line-height: 1.6; margin: 0;">${info.event.rendering.replace(/\n/g, '<br>')}</p>
                                 </div>
@@ -675,6 +672,12 @@
                         title: "我们两个天下第一好www",
                         start: "2025-02-03",
                         borderColor: "assets/img/dataImgs/25-02-03.jpg"
+                    },
+                    {
+                        title: "靓靓蒸虾",
+                        start: "2024-09-07",
+                        rendering: "from 燕燕：宝宝个我买的靓靓蒸虾，我一个人一晚上把所有的虾子都吃掉啦！",
+                        borderColor: "assets/img/dataImgs/24-09-07.jpg"
                     },
                 ],
                 // 自定义返回内容
