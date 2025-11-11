@@ -11,13 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <!-- Firebase 配置 -->
-    <script src="./firebase-config.js"></script>
-
     <style>
         :root {
             --primary-color: #ff557d;
@@ -423,142 +416,9 @@
         const STORAGE_KEY = 'intimate_diary_data';
         const PASSWORD = 'xp9174110'; // 与秘密相册相同的密码
         let currentFilter = 'all';
-        let diaryCollection;
-
-        // 等待 Firebase 初始化
-        function waitForFirebase() {
-            return new Promise((resolve) => {
-                if (window.firebaseDb && window.firebaseDb.diaryCollection) {
-                    diaryCollection = window.firebaseDb.diaryCollection;
-                    resolve();
-                } else {
-                    setTimeout(() => waitForFirebase().then(resolve), 100);
-                }
-            });
-        }
-
-        // 从 Firebase 获取数据
-        async function getData() {
-            try {
-                await waitForFirebase();
-
-                // 从 Firebase 获取数据
-                const snapshot = await diaryCollection.get();
-                const records = [];
-
-                snapshot.forEach(doc => {
-                    records.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                const data = { records: records };
-
-                // 同步到本地存储作为缓存
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-                return data;
-            } catch (error) {
-                console.error('从 Firebase 读取数据失败，使用本地缓存:', error);
-                // 如果 Firebase 失败，使用本地存储
-                const localData = localStorage.getItem(STORAGE_KEY);
-                return localData ? JSON.parse(localData) : { records: [] };
-            }
-        }
-
-        // 保存数据到 Firebase
-        async function saveData(recordData) {
-            try {
-                await waitForFirebase();
-
-                // 保存到 Firebase
-                const docRef = await diaryCollection.add({
-                    ...recordData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                // 返回生成的 ID
-                return docRef.id;
-            } catch (error) {
-                console.error('保存到 Firebase 失败:', error);
-                Swal.fire({
-                    icon: 'warning',
-                    title: '保存提示',
-                    text: '数据已保存到本地，但云端同步失败。请检查网络连接。',
-                    confirmButtonText: '知道了'
-                });
-                throw error;
-            }
-        }
-
-        // 从 Firebase 删除数据
-        async function deleteData(id) {
-            try {
-                await waitForFirebase();
-                await diaryCollection.doc(id).delete();
-            } catch (error) {
-                console.error('从 Firebase 删除数据失败:', error);
-                throw error;
-            }
-        }
-
-        // 迁移本地数据到 Firebase
-        async function migrateLocalDataToFirebase() {
-            try {
-                const localData = localStorage.getItem(STORAGE_KEY);
-                if (!localData) return;
-
-                const data = JSON.parse(localData);
-                if (!data.records || data.records.length === 0) return;
-
-                await waitForFirebase();
-
-                // 检查 Firebase 是否已有数据
-                const snapshot = await diaryCollection.limit(1).get();
-                if (!snapshot.empty) return; // 已有数据，不迁移
-
-                // 询问用户是否迁移
-                const result = await Swal.fire({
-                    title: '发现本地数据',
-                    text: `检测到 ${data.records.length} 条本地记录，是否同步到云端？`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: '同步到云端',
-                    cancelButtonText: '暂不同步'
-                });
-
-                if (result.isConfirmed) {
-                    // 显示加载提示
-                    Swal.fire({
-                        title: '正在同步...',
-                        text: '请稍候',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    // 迁移数据
-                    for (const record of data.records) {
-                        const { id, ...recordData } = record; // 移除本地 ID
-                        await diaryCollection.add(recordData);
-                    }
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: '同步成功！',
-                        text: '本地数据已成功同步到云端',
-                        confirmButtonText: '好的'
-                    });
-                }
-            } catch (error) {
-                console.error('数据迁移失败:', error);
-            }
-        }
 
         // 页面加载时验证密码
-        window.addEventListener('DOMContentLoaded', async function() {
+        window.addEventListener('DOMContentLoaded', function() {
             checkPassword();
         });
 
@@ -571,7 +431,8 @@
                 // 已验证，清除标记并直接显示内容
                 sessionStorage.removeItem('diary_authenticated');
                 document.getElementById('mainContent').style.display = 'block';
-                initPage();
+                loadRecords();
+                updateStatistics();
                 return;
             }
 
@@ -599,33 +460,24 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('mainContent').style.display = 'block';
-                    initPage();
+                    loadRecords();
+                    updateStatistics();
                 } else {
                     window.location.href = 'index.html';
                 }
             });
         }
 
-        // 初始化页面
-        async function initPage() {
-            // 尝试迁移本地数据到 Firebase
-            await migrateLocalDataToFirebase();
-
-            // 加载记录和统计信息
-            await loadRecords();
-            await updateStatistics();
+        // 获取数据
+        function getData() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : { records: [] };
         }
 
-        // 获取数据（保持向后兼容，已由上面的新函数替代）
-        // function getData() {
-        //     const data = localStorage.getItem(STORAGE_KEY);
-        //     return data ? JSON.parse(data) : { records: [] };
-        // }
-
-        // 保存数据（保持向后兼容，已由上面的新函数替代）
-        // function saveData(data) {
-        //     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        // }
+        // 保存数据
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
 
         // 格式化日期时间
         function formatDateTime(datetime) {
@@ -646,7 +498,7 @@
         }
 
         // 添加记录
-        async function addRecord() {
+        function addRecord() {
             const now = new Date();
             const defaultDatetime = now.toISOString().slice(0, 16);
 
@@ -685,53 +537,38 @@
 
                     return { datetime, mood, notes };
                 }
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     const { datetime, mood, notes } = result.value;
 
-                    // 显示加载提示
+                    // 保存数据
+                    const data = getData();
+                    data.records.push({
+                        id: Date.now(),
+                        datetime: datetime,
+                        mood: mood,
+                        notes: notes,
+                        createdAt: new Date().toISOString()
+                    });
+                    saveData(data);
+
                     Swal.fire({
-                        title: '正在保存...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                        icon: 'success',
+                        title: '保存成功！',
+                        text: '记录已添加',
+                        timer: 1500,
+                        showConfirmButton: false
                     });
 
-                    try {
-                        // 保存到 Firebase
-                        await saveData({
-                            datetime: datetime,
-                            mood: mood,
-                            notes: notes
-                        });
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '保存成功！',
-                            text: '记录已添加',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-
-                        // 刷新页面
-                        await loadRecords();
-                        await updateStatistics();
-                    } catch (error) {
-                        console.error('保存失败:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '保存失败',
-                            text: '请检查网络连接后重试',
-                            confirmButtonText: '知道了'
-                        });
-                    }
+                    // 刷新页面
+                    loadRecords();
+                    updateStatistics();
                 }
             });
         }
 
         // 删除记录
-        async function deleteRecord(id) {
+        function deleteRecord(id) {
             Swal.fire({
                 title: '确认删除？',
                 text: '删除后无法恢复',
@@ -740,46 +577,28 @@
                 confirmButtonText: '确认删除',
                 cancelButtonText: '取消',
                 confirmButtonColor: '#ff4444'
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    // 显示加载提示
+                    const data = getData();
+                    data.records = data.records.filter(r => r.id !== id);
+                    saveData(data);
+
                     Swal.fire({
-                        title: '正在删除...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                        icon: 'success',
+                        title: '已删除',
+                        showConfirmButton: false,
+                        timer: 1500
                     });
 
-                    try {
-                        await deleteData(id);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '已删除',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-
-                        // 刷新页面
-                        await loadRecords();
-                        await updateStatistics();
-                    } catch (error) {
-                        console.error('删除失败:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '删除失败',
-                            text: '请检查网络连接后重试',
-                            confirmButtonText: '知道了'
-                        });
-                    }
+                    loadRecords();
+                    updateStatistics();
                 }
             });
         }
 
         // 查看记录详情
-        async function viewRecord(id) {
-            const data = await getData();
+        function viewRecord(id) {
+            const data = getData();
             const record = data.records.find(r => r.id === id);
 
             if (!record) return;
@@ -813,8 +632,8 @@
         }
 
         // 加载记录
-        async function loadRecords() {
-            const data = await getData();
+        function loadRecords() {
+            const data = getData();
             let records = data.records;
 
             // 按日期倒序排列
@@ -909,8 +728,8 @@
         }
 
         // 更新统计信息
-        async function updateStatistics() {
-            const data = await getData();
+        function updateStatistics() {
+            const data = getData();
             const records = data.records;
 
             // 总计
@@ -936,8 +755,8 @@
         }
 
         // 查看统计
-        async function viewStatistics() {
-            const data = await getData();
+        function viewStatistics() {
+            const data = getData();
             const records = data.records;
 
             if (records.length === 0) {

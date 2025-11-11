@@ -21,13 +21,6 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/zh-cn.js'></script>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <!-- Firebase 配置 -->
-    <script src="./firebase-config.js"></script>
-
     <style>
         :root {
             --primary-color: #ff557d;
@@ -351,138 +344,16 @@
     <script>
         // 本地存储数据管理
         const STORAGE_KEY = 'period_tracker_data';
-        let periodsCollection;
 
-        // 等待 Firebase 初始化
-        function waitForFirebase() {
-            return new Promise((resolve) => {
-                if (window.firebaseDb && window.firebaseDb.periodsCollection) {
-                    periodsCollection = window.firebaseDb.periodsCollection;
-                    resolve();
-                } else {
-                    setTimeout(() => waitForFirebase().then(resolve), 100);
-                }
-            });
+        // 获取数据
+        function getData() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : { periods: [] };
         }
 
-        // 从 Firebase 获取数据
-        async function getData() {
-            try {
-                await waitForFirebase();
-
-                // 从 Firebase 获取数据
-                const snapshot = await periodsCollection.get();
-                const periods = [];
-
-                snapshot.forEach(doc => {
-                    periods.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                const data = { periods: periods };
-
-                // 同步到本地存储作为缓存
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-                return data;
-            } catch (error) {
-                console.error('从 Firebase 读取数据失败，使用本地缓存:', error);
-                // 如果 Firebase 失败，使用本地存储
-                const localData = localStorage.getItem(STORAGE_KEY);
-                return localData ? JSON.parse(localData) : { periods: [] };
-            }
-        }
-
-        // 保存数据到 Firebase
-        async function saveData(periodData) {
-            try {
-                await waitForFirebase();
-
-                // 保存到 Firebase
-                const docRef = await periodsCollection.add({
-                    ...periodData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                // 返回生成的 ID
-                return docRef.id;
-            } catch (error) {
-                console.error('保存到 Firebase 失败:', error);
-                Swal.fire({
-                    icon: 'warning',
-                    title: '保存提示',
-                    text: '数据已保存到本地，但云端同步失败。请检查网络连接。',
-                    confirmButtonText: '知道了'
-                });
-                throw error;
-            }
-        }
-
-        // 从 Firebase 删除数据
-        async function deleteData(id) {
-            try {
-                await waitForFirebase();
-                await periodsCollection.doc(id).delete();
-            } catch (error) {
-                console.error('从 Firebase 删除数据失败:', error);
-                throw error;
-            }
-        }
-
-        // 迁移本地数据到 Firebase
-        async function migrateLocalDataToFirebase() {
-            try {
-                const localData = localStorage.getItem(STORAGE_KEY);
-                if (!localData) return;
-
-                const data = JSON.parse(localData);
-                if (!data.periods || data.periods.length === 0) return;
-
-                await waitForFirebase();
-
-                // 检查 Firebase 是否已有数据
-                const snapshot = await periodsCollection.limit(1).get();
-                if (!snapshot.empty) return; // 已有数据，不迁移
-
-                // 询问用户是否迁移
-                const result = await Swal.fire({
-                    title: '发现本地数据',
-                    text: `检测到 ${data.periods.length} 条本地记录，是否同步到云端？`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: '同步到云端',
-                    cancelButtonText: '暂不同步'
-                });
-
-                if (result.isConfirmed) {
-                    // 显示加载提示
-                    Swal.fire({
-                        title: '正在同步...',
-                        text: '请稍候',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    // 迁移数据
-                    for (const period of data.periods) {
-                        const { id, ...periodData } = period; // 移除本地 ID
-                        await periodsCollection.add(periodData);
-                    }
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: '同步成功！',
-                        text: '本地数据已成功同步到云端',
-                        confirmButtonText: '好的'
-                    });
-                }
-            } catch (error) {
-                console.error('数据迁移失败:', error);
-            }
+        // 保存数据
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         }
 
         // 日期计算辅助函数
@@ -536,7 +407,7 @@
         }
 
         // 添加月经记录
-        async function addPeriodRecord() {
+        function addPeriodRecord() {
             Swal.fire({
                 title: '添加月经记录',
                 html: `
@@ -580,69 +451,46 @@
 
                     return { startDate, endDate, cycleLength };
                 }
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     const { startDate, endDate, cycleLength } = result.value;
 
-                    // 显示加载提示
+                    // 计算相关日期
+                    const cycleDates = calculateCycleDates(startDate, endDate, cycleLength);
+
+                    // 保存数据
+                    const data = getData();
+                    data.periods.push({
+                        id: Date.now(),
+                        ...cycleDates,
+                        createdAt: new Date().toISOString()
+                    });
+                    saveData(data);
+
                     Swal.fire({
-                        title: '正在保存...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                        icon: 'success',
+                        title: '保存成功！',
+                        html: `
+                            <div style="text-align: left; padding: 10px;">
+                                <p>📅 月经期：${formatDateChinese(startDate)} - ${formatDateChinese(endDate)}</p>
+                                <p>💙 排卵日：${formatDateChinese(cycleDates.ovulationDate)}</p>
+                                <p>💕 排卵期：${formatDateChinese(cycleDates.fertileStart)} - ${formatDateChinese(cycleDates.fertileEnd)}</p>
+                                <p>🔔 下次月经：${formatDateChinese(cycleDates.nextPeriodDate)}</p>
+                            </div>
+                        `,
+                        confirmButtonText: '好的'
                     });
 
-                    try {
-                        // 计算相关日期
-                        const cycleDates = calculateCycleDates(startDate, endDate, cycleLength);
-
-                        // 保存到 Firebase
-                        await saveData(cycleDates);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '保存成功！',
-                            html: `
-                                <div style="text-align: left; padding: 10px;">
-                                    <p>📅 月经期：${formatDateChinese(startDate)} - ${formatDateChinese(endDate)}</p>
-                                    <p>💙 排卵日：${formatDateChinese(cycleDates.ovulationDate)}</p>
-                                    <p>💕 排卵期：${formatDateChinese(cycleDates.fertileStart)} - ${formatDateChinese(cycleDates.fertileEnd)}</p>
-                                    <p>🔔 下次月经：${formatDateChinese(cycleDates.nextPeriodDate)}</p>
-                                </div>
-                            `,
-                            confirmButtonText: '好的'
-                        });
-
-                        // 刷新日历和统计信息
-                        await initCalendar();
-                        await updateInfoCards();
-                    } catch (error) {
-                        console.error('保存失败:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '保存失败',
-                            text: '请检查网络连接后重试',
-                            confirmButtonText: '知道了'
-                        });
-                    }
+                    // 刷新日历
+                    initCalendar();
+                    updateInfoCards();
                 }
             });
         }
 
         // 查看历史记录
-        async function viewHistory() {
-            // 显示加载提示
-            Swal.fire({
-                title: '加载中...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            const data = await getData();
-
+        function viewHistory() {
+            const data = getData();
             if (data.periods.length === 0) {
                 Swal.fire({
                     icon: 'info',
@@ -664,7 +512,7 @@
                     <div style="border: 2px solid #f0f0f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; background: #fafafa;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <strong style="color: #ff557d;">记录 ${sortedPeriods.length - index}</strong>
-                            <button onclick="deleteRecord('${period.id}')" style="background: #ff4444; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px;">删除</button>
+                            <button onclick="deleteRecord(${period.id})" style="background: #ff4444; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px;">删除</button>
                         </div>
                         <p style="margin: 5px 0; font-size: 14px;">📅 月经期：${formatDateChinese(period.startDate)} - ${formatDateChinese(period.endDate)}</p>
                         <p style="margin: 5px 0; font-size: 14px;">💙 排卵日：${formatDateChinese(period.ovulationDate)}</p>
@@ -688,7 +536,7 @@
         }
 
         // 删除记录
-        async function deleteRecord(id) {
+        function deleteRecord(id) {
             Swal.fire({
                 title: '确认删除？',
                 text: '删除后无法恢复',
@@ -697,48 +545,30 @@
                 confirmButtonText: '确认删除',
                 cancelButtonText: '取消',
                 confirmButtonColor: '#ff4444'
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    // 显示加载提示
+                    const data = getData();
+                    data.periods = data.periods.filter(p => p.id !== id);
+                    saveData(data);
+
                     Swal.fire({
-                        title: '正在删除...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
+                        icon: 'success',
+                        title: '已删除',
+                        showConfirmButton: false,
+                        timer: 1500
                     });
 
-                    try {
-                        await deleteData(id);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: '已删除',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-
-                        // 刷新日历和统计信息
-                        setTimeout(async () => {
-                            await initCalendar();
-                            await updateInfoCards();
-                        }, 1500);
-                    } catch (error) {
-                        console.error('删除失败:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: '删除失败',
-                            text: '请检查网络连接后重试',
-                            confirmButtonText: '知道了'
-                        });
-                    }
+                    // 刷新页面
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
                 }
             });
         }
 
         // 生成日历事件
-        async function generateCalendarEvents() {
-            const data = await getData();
+        function generateCalendarEvents() {
+            const data = getData();
             const events = [];
             const today = new Date();
 
@@ -830,8 +660,8 @@
         }
 
         // 更新信息卡片
-        async function updateInfoCards() {
-            const data = await getData();
+        function updateInfoCards() {
+            const data = getData();
 
             if (data.periods.length === 0) {
                 document.getElementById('nextPeriodDate').textContent = '-';
@@ -864,7 +694,7 @@
 
         // 初始化日历
         let calendar;
-        async function initCalendar() {
+        function initCalendar() {
             const calendarEl = document.getElementById('calendar');
 
             if (calendar) {
@@ -884,7 +714,7 @@
                     month: '月',
                     week: '周'
                 },
-                events: await generateCalendarEvents(),
+                events: generateCalendarEvents(),
                 eventClick: function(info) {
                     const type = info.event.extendedProps.type;
                     let title = '';
@@ -924,13 +754,9 @@
         }
 
         // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', async function() {
-            // 尝试迁移本地数据到 Firebase
-            await migrateLocalDataToFirebase();
-
-            // 初始化日历和信息卡片
-            await initCalendar();
-            await updateInfoCards();
+        document.addEventListener('DOMContentLoaded', function() {
+            initCalendar();
+            updateInfoCards();
         });
     </script>
 </body>
