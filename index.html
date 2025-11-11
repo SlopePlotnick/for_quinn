@@ -404,6 +404,7 @@
                                         </div>
                                     </span>
                                 </div>
+                                <!-- 图片尾 -->
                                 <script>
                                     function dj() {
                                         window.location.href = "assets/imgs.html";
@@ -434,6 +435,111 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 小小坡 & 小小燕 模块 -->
+        <div class="container mt-sm-5 mt-3" style="padding-top: 2rem;">
+            <div class="col" style="border-radius: 10rem">
+                <div class="card shadow-lg mb-5">
+                    <!-- 文章上方波动样式 -->
+                    <div class="card-header bg-gradient-love p-5 position-relative">
+                        <h3 class="text-white mb-0">小小坡 & 小小燕</h3>
+                        <p class="text-white opacity-8 mb-4">我们的专属健康与情感记录空间</p>
+                        <div class="position-absolute w-100 z-index-1 bottom-0 ms-n5">
+                            <svg class="waves" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40"
+                                preserveAspectRatio="none" shape-rendering="auto" style="height:7vh;min-height:50px;">
+                                <defs>
+                                    <path id="gentle-wave"
+                                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z">
+                                    </path>
+                                </defs>
+                                <g class="moving-waves">
+                                    <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,225,255,0.40"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)"></use>
+                                    <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95"></use>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- 文章上方波动样式结尾 -->
+                    <div class="card-body p-5">
+                        <h2 class="mt-5 mb-3">用心记录，用爱守护</h2>
+                        <p class="mb-5">这里是属于我们两个人的特别空间</p>
+
+                        <!-- 卡片容器 - 居中显示 -->
+                        <div class="row justify-content-center mt-4">
+                            <!-- 健康记录 -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <span style="cursor: pointer;" onclick="goToHealth()">
+                                    <div class="card shadow-lg move-on-hover" style="height: 100%; min-height: 280px;">
+                                        <div style="background: linear-gradient(135deg, #ff557d 0%, #ff8da1 100%); height: 200px; display: flex; align-items: center; justify-content: center; font-size: 64px; border-radius: 15px 15px 0 0;">
+                                            💗
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h5 class="mb-2" style="color: #ff557d; font-weight: bold;">健康记录</h5>
+                                            <p class="text-secondary">燕燕的月经周期记录</p>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <!-- 私密日记 -->
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <span style="cursor: pointer;" onclick="checkPasswordForDiary()">
+                                    <div class="card shadow-lg move-on-hover" style="height: 100%; min-height: 280px;">
+                                        <div style="background: linear-gradient(135deg, #ffc1d0 0%, #ffe4e1 100%); height: 200px; display: flex; align-items: center; justify-content: center; font-size: 64px; border-radius: 15px 15px 0 0; position: relative; overflow: hidden;">
+                                            <div style="filter: blur(8px); font-size: 64px;">💕</div>
+                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; color: #ff557d; font-weight: bold; background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 25px;">
+                                                🔒 需要密码
+                                            </div>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h5 class="mb-2" style="color: #ff557d; font-weight: bold;">私密日记</h5>
+                                            <p class="text-secondary">我们的甜蜜时光</p>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function goToHealth() {
+                            window.location.href = "health-tracker.html";
+                        }
+
+                        function checkPasswordForDiary() {
+                            Swal.fire({
+                                title: '🔒 请输入密码',
+                                input: 'password',
+                                inputAttributes: {
+                                    autocapitalize: 'off',
+                                    placeholder: '输入密码以访问私密日记'
+                                },
+                                showCancelButton: true,
+                                confirmButtonText: '确认',
+                                cancelButtonText: '取消',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (password) => {
+                                    if (password === 'xp9174110') {
+                                        // 设置会话标记，表示已验证密码
+                                        sessionStorage.setItem('diary_authenticated', 'true');
+                                        window.location.href = "intimate-diary.html";
+                                    } else {
+                                        Swal.showValidationMessage('密码错误，请重试');
+                                    }
+                                },
+                                allowOutsideClick: () => !Swal.isLoading()
+                            });
+                        }
+                    </script>
                 </div>
             </div>
         </div>

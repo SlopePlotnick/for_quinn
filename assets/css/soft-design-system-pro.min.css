@@ -21086,6 +21086,10 @@ label {
   background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
 }
 
+.bg-gradient-love {
+  background-image: linear-gradient(to right, #ff557d, #ff8da1, #ffc1d0);
+}
+
 .bg-gradient-rizhi {
   /* background-image: linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99); */
   background-image: linear-gradient(to right, #f6736b, #934f91);

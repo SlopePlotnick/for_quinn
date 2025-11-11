@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+    <title>健康记录 - 燕燕的月经周期</title>
+
+    <link id="pagestyle" href="./assets/css/soft-design-system-pro.min.css?v=1.0.9" rel="stylesheet">
+    <link href="./assets/css/calendar.css" rel="stylesheet">
+    <link href="./assets/css/modification.css" rel="stylesheet">
+
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
+
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/zh-cn.js'></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase 配置 -->
+    <script src="./firebase-config.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #ff557d;
+            --secondary-color: #ff8da1;
+            --period-color: #ff557d;
+            --ovulation-color: #5865F2;
+            --fertile-color: #b8c5ff;
+            --predicted-color: #ffc1d0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffeef3 0%, #fff5f7 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(255, 85, 125, 0.1);
+        }
+
+        .header-section h1 {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .header-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .btn-add-period {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 85, 125, 0.3);
+            margin: 10px;
+        }
+
+        .btn-add-period:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 85, 125, 0.4);
+        }
+
+        .calendar-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(255, 85, 125, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .legend {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(255, 85, 125, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .legend h3 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            margin: 10px 15px 10px 0;
+        }
+
+        .legend-color {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            margin-right: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-text {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(255, 85, 125, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card-title {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .info-card-value {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .info-card-subtitle {
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* FullCalendar 自定义样式 */
+        .fc {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .fc-event {
+            border: none !important;
+            cursor: pointer;
+        }
+
+        .fc-event-period {
+            background-color: var(--period-color) !important;
+        }
+
+        .fc-event-ovulation {
+            background-color: var(--ovulation-color) !important;
+        }
+
+        .fc-event-fertile {
+            background-color: var(--fertile-color) !important;
+        }
+
+        .fc-event-predicted {
+            background-color: var(--predicted-color) !important;
+            opacity: 0.7;
+        }
+
+        .fc-daygrid-day:hover {
+            background-color: rgba(255, 85, 125, 0.05);
+        }
+
+        .fc .fc-button-primary {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        .fc .fc-button-primary:hover {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .calendar-container,
+            .legend {
+                padding: 15px;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .legend-item {
+                display: flex;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        /* 返回按钮 */
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 85, 125, 0.2);
+            z-index: 1000;
+        }
+
+        .btn-back:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* SweetAlert2 自定义样式 */
+        .swal2-popup {
+            border-radius: 20px !important;
+        }
+
+        .swal2-confirm {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+            border-radius: 25px !important;
+            padding: 10px 25px !important;
+        }
+
+        .swal2-input {
+            border-radius: 10px !important;
+            border: 2px solid #f0f0f0 !important;
+        }
+
+        .swal2-input:focus {
+            border-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="btn-back">← 返回首页</a>
+
+    <div class="container">
+        <!-- 头部区域 -->
+        <div class="header-section">
+            <h1>💗 燕燕的健康记录 💗</h1>
+            <p>记录月经周期，关爱女朋友的健康</p>
+            <button class="btn-add-period" onclick="addPeriodRecord()">➕ 添加月经记录</button>
+            <button class="btn-add-period" onclick="viewHistory()">📋 查看历史记录</button>
+        </div>
+
+        <!-- 信息卡片 -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-title">下次月经</div>
+                <div class="info-card-value" id="nextPeriodDate">-</div>
+                <div class="info-card-subtitle">预测日期</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-title">排卵日</div>
+                <div class="info-card-value" id="ovulationDate">-</div>
+                <div class="info-card-subtitle">最佳受孕日</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-title">排卵期</div>
+                <div class="info-card-value" id="fertileRange">-</div>
+                <div class="info-card-subtitle">易孕期</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-title">平均周期</div>
+                <div class="info-card-value" id="avgCycle">28天</div>
+                <div class="info-card-subtitle">基于历史记录</div>
+            </div>
+        </div>
+
+        <!-- 图例 -->
+        <div class="legend">
+            <h3>📌 日历图例</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--period-color);"></div>
+                <span class="legend-text">月经期</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--ovulation-color);"></div>
+                <span class="legend-text">排卵日</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--fertile-color);"></div>
+                <span class="legend-text">排卵期（易孕期）</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: var(--predicted-color);"></div>
+                <span class="legend-text">预测月经期</span>
+            </div>
+        </div>
+
+        <!-- 日历区域 -->
+        <div class="calendar-container">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    <script>
+        // 本地存储数据管理
+        const STORAGE_KEY = 'period_tracker_data';
+        let periodsCollection;
+
+        // 等待 Firebase 初始化
+        function waitForFirebase() {
+            return new Promise((resolve) => {
+                if (window.firebaseDb && window.firebaseDb.periodsCollection) {
+                    periodsCollection = window.firebaseDb.periodsCollection;
+                    resolve();
+                } else {
+                    setTimeout(() => waitForFirebase().then(resolve), 100);
+                }
+            });
+        }
+
+        // 从 Firebase 获取数据
+        async function getData() {
+            try {
+                await waitForFirebase();
+
+                // 从 Firebase 获取数据
+                const snapshot = await periodsCollection.get();
+                const periods = [];
+
+                snapshot.forEach(doc => {
+                    periods.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                const data = { periods: periods };
+
+                // 同步到本地存储作为缓存
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+                return data;
+            } catch (error) {
+                console.error('从 Firebase 读取数据失败，使用本地缓存:', error);
+                // 如果 Firebase 失败，使用本地存储
+                const localData = localStorage.getItem(STORAGE_KEY);
+                return localData ? JSON.parse(localData) : { periods: [] };
+            }
+        }
+
+        // 保存数据到 Firebase
+        async function saveData(periodData) {
+            try {
+                await waitForFirebase();
+
+                // 保存到 Firebase
+                const docRef = await periodsCollection.add({
+                    ...periodData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // 返回生成的 ID
+                return docRef.id;
+            } catch (error) {
+                console.error('保存到 Firebase 失败:', error);
+                Swal.fire({
+                    icon: 'warning',
+                    title: '保存提示',
+                    text: '数据已保存到本地，但云端同步失败。请检查网络连接。',
+                    confirmButtonText: '知道了'
+                });
+                throw error;
+            }
+        }
+
+        // 从 Firebase 删除数据
+        async function deleteData(id) {
+            try {
+                await waitForFirebase();
+                await periodsCollection.doc(id).delete();
+            } catch (error) {
+                console.error('从 Firebase 删除数据失败:', error);
+                throw error;
+            }
+        }
+
+        // 迁移本地数据到 Firebase
+        async function migrateLocalDataToFirebase() {
+            try {
+                const localData = localStorage.getItem(STORAGE_KEY);
+                if (!localData) return;
+
+                const data = JSON.parse(localData);
+                if (!data.periods || data.periods.length === 0) return;
+
+                await waitForFirebase();
+
+                // 检查 Firebase 是否已有数据
+                const snapshot = await periodsCollection.limit(1).get();
+                if (!snapshot.empty) return; // 已有数据，不迁移
+
+                // 询问用户是否迁移
+                const result = await Swal.fire({
+                    title: '发现本地数据',
+                    text: `检测到 ${data.periods.length} 条本地记录，是否同步到云端？`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: '同步到云端',
+                    cancelButtonText: '暂不同步'
+                });
+
+                if (result.isConfirmed) {
+                    // 显示加载提示
+                    Swal.fire({
+                        title: '正在同步...',
+                        text: '请稍候',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // 迁移数据
+                    for (const period of data.periods) {
+                        const { id, ...periodData } = period; // 移除本地 ID
+                        await periodsCollection.add(periodData);
+                    }
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '同步成功！',
+                        text: '本地数据已成功同步到云端',
+                        confirmButtonText: '好的'
+                    });
+                }
+            } catch (error) {
+                console.error('数据迁移失败:', error);
+            }
+        }
+
+        // 日期计算辅助函数
+        function addDays(date, days) {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDateChinese(date) {
+            const d = new Date(date);
+            const month = d.getMonth() + 1;
+            const day = d.getDate();
+            return `${month}月${day}日`;
+        }
+
+        // 计算周期相关日期
+        function calculateCycleDates(startDate, endDate, cycleLength = 28) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            // 下次月经开始日期 = 本次开始 + 周期长度
+            const nextPeriodDate = addDays(start, cycleLength);
+
+            // 排卵日 = 下次月经开始 - 14天
+            const ovulationDate = addDays(nextPeriodDate, -14);
+
+            // 排卵期开始 = 排卵日 - 5天
+            const fertileStart = addDays(ovulationDate, -5);
+
+            // 排卵期结束 = 排卵日 + 4天
+            const fertileEnd = addDays(ovulationDate, 4);
+
+            return {
+                startDate: formatDate(start),
+                endDate: formatDate(end),
+                nextPeriodDate: formatDate(nextPeriodDate),
+                ovulationDate: formatDate(ovulationDate),
+                fertileStart: formatDate(fertileStart),
+                fertileEnd: formatDate(fertileEnd),
+                cycleLength
+            };
+        }
+
+        // 添加月经记录
+        async function addPeriodRecord() {
+            Swal.fire({
+                title: '添加月经记录',
+                html: `
+                    <div style="text-align: left; padding: 10px;">
+                        <label style="display: block; margin-bottom: 5px; color: #666;">月经开始日期：</label>
+                        <input type="date" id="startDate" class="swal2-input" style="width: 90%;" value="${formatDate(new Date())}">
+
+                        <label style="display: block; margin-bottom: 5px; margin-top: 15px; color: #666;">月经结束日期：</label>
+                        <input type="date" id="endDate" class="swal2-input" style="width: 90%;">
+
+                        <label style="display: block; margin-bottom: 5px; margin-top: 15px; color: #666;">周期长度（天）：</label>
+                        <input type="number" id="cycleLength" class="swal2-input" style="width: 90%;" value="28" min="20" max="40">
+
+                        <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                            ℹ️ 周期长度是指从本次月经第一天到下次月经第一天的天数，一般为28天
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: '保存',
+                showCancelButton: true,
+                cancelButtonText: '取消',
+                preConfirm: () => {
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const cycleLength = parseInt(document.getElementById('cycleLength').value);
+
+                    if (!startDate || !endDate) {
+                        Swal.showValidationMessage('请填写完整的日期信息');
+                        return false;
+                    }
+
+                    if (new Date(endDate) < new Date(startDate)) {
+                        Swal.showValidationMessage('结束日期不能早于开始日期');
+                        return false;
+                    }
+
+                    if (cycleLength < 20 || cycleLength > 40) {
+                        Swal.showValidationMessage('周期长度应在20-40天之间');
+                        return false;
+                    }
+
+                    return { startDate, endDate, cycleLength };
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const { startDate, endDate, cycleLength } = result.value;
+
+                    // 显示加载提示
+                    Swal.fire({
+                        title: '正在保存...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    try {
+                        // 计算相关日期
+                        const cycleDates = calculateCycleDates(startDate, endDate, cycleLength);
+
+                        // 保存到 Firebase
+                        await saveData(cycleDates);
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '保存成功！',
+                            html: `
+                                <div style="text-align: left; padding: 10px;">
+                                    <p>📅 月经期：${formatDateChinese(startDate)} - ${formatDateChinese(endDate)}</p>
+                                    <p>💙 排卵日：${formatDateChinese(cycleDates.ovulationDate)}</p>
+                                    <p>💕 排卵期：${formatDateChinese(cycleDates.fertileStart)} - ${formatDateChinese(cycleDates.fertileEnd)}</p>
+                                    <p>🔔 下次月经：${formatDateChinese(cycleDates.nextPeriodDate)}</p>
+                                </div>
+                            `,
+                            confirmButtonText: '好的'
+                        });
+
+                        // 刷新日历和统计信息
+                        await initCalendar();
+                        await updateInfoCards();
+                    } catch (error) {
+                        console.error('保存失败:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: '保存失败',
+                            text: '请检查网络连接后重试',
+                            confirmButtonText: '知道了'
+                        });
+                    }
+                }
+            });
+        }
+
+        // 查看历史记录
+        async function viewHistory() {
+            // 显示加载提示
+            Swal.fire({
+                title: '加载中...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const data = await getData();
+
+            if (data.periods.length === 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: '暂无记录',
+                    text: '还没有添加任何月经记录哦',
+                    confirmButtonText: '好的'
+                });
+                return;
+            }
+
+            // 按日期倒序排列
+            const sortedPeriods = data.periods.sort((a, b) =>
+                new Date(b.startDate) - new Date(a.startDate)
+            );
+
+            let html = '<div style="text-align: left; max-height: 400px; overflow-y: auto;">';
+            sortedPeriods.forEach((period, index) => {
+                html += `
+                    <div style="border: 2px solid #f0f0f0; border-radius: 10px; padding: 15px; margin-bottom: 15px; background: #fafafa;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: #ff557d;">记录 ${sortedPeriods.length - index}</strong>
+                            <button onclick="deleteRecord('${period.id}')" style="background: #ff4444; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-size: 12px;">删除</button>
+                        </div>
+                        <p style="margin: 5px 0; font-size: 14px;">📅 月经期：${formatDateChinese(period.startDate)} - ${formatDateChinese(period.endDate)}</p>
+                        <p style="margin: 5px 0; font-size: 14px;">💙 排卵日：${formatDateChinese(period.ovulationDate)}</p>
+                        <p style="margin: 5px 0; font-size: 14px;">💕 排卵期：${formatDateChinese(period.fertileStart)} - ${formatDateChinese(period.fertileEnd)}</p>
+                        <p style="margin: 5px 0; font-size: 14px;">🔔 下次月经：${formatDateChinese(period.nextPeriodDate)}</p>
+                        <p style="margin: 5px 0; font-size: 12px; color: #999;">周期：${period.cycleLength}天</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            Swal.fire({
+                title: '历史记录',
+                html: html,
+                width: '600px',
+                confirmButtonText: '关闭',
+                customClass: {
+                    container: 'history-modal'
+                }
+            });
+        }
+
+        // 删除记录
+        async function deleteRecord(id) {
+            Swal.fire({
+                title: '确认删除？',
+                text: '删除后无法恢复',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '确认删除',
+                cancelButtonText: '取消',
+                confirmButtonColor: '#ff4444'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    // 显示加载提示
+                    Swal.fire({
+                        title: '正在删除...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    try {
+                        await deleteData(id);
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: '已删除',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        // 刷新日历和统计信息
+                        setTimeout(async () => {
+                            await initCalendar();
+                            await updateInfoCards();
+                        }, 1500);
+                    } catch (error) {
+                        console.error('删除失败:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: '删除失败',
+                            text: '请检查网络连接后重试',
+                            confirmButtonText: '知道了'
+                        });
+                    }
+                }
+            });
+        }
+
+        // 生成日历事件
+        async function generateCalendarEvents() {
+            const data = await getData();
+            const events = [];
+            const today = new Date();
+
+            data.periods.forEach(period => {
+                const periodStart = new Date(period.startDate);
+                const periodEnd = new Date(period.endDate);
+                const nextPeriodDate = new Date(period.nextPeriodDate);
+
+                // 只显示过去6个月和未来6个月的数据
+                const sixMonthsAgo = addDays(today, -180);
+                const sixMonthsLater = addDays(today, 180);
+
+                // 月经期（实际记录）
+                if (periodStart >= sixMonthsAgo) {
+                    const current = new Date(periodStart);
+                    while (current <= periodEnd) {
+                        events.push({
+                            title: '月经期',
+                            start: formatDate(current),
+                            allDay: true,
+                            classNames: ['fc-event-period'],
+                            extendedProps: {
+                                type: 'period'
+                            }
+                        });
+                        current.setDate(current.getDate() + 1);
+                    }
+                }
+
+                // 预测的下次月经期（只显示未来的）
+                if (nextPeriodDate >= today && nextPeriodDate <= sixMonthsLater) {
+                    const durationDays = Math.ceil((periodEnd - periodStart) / (1000 * 60 * 60 * 24));
+                    const predictedEnd = addDays(nextPeriodDate, durationDays);
+
+                    const current = new Date(nextPeriodDate);
+                    while (current <= predictedEnd) {
+                        events.push({
+                            title: '预测月经',
+                            start: formatDate(current),
+                            allDay: true,
+                            classNames: ['fc-event-predicted'],
+                            extendedProps: {
+                                type: 'predicted'
+                            }
+                        });
+                        current.setDate(current.getDate() + 1);
+                    }
+                }
+
+                // 排卵日
+                const ovulationDate = new Date(period.ovulationDate);
+                if (ovulationDate >= sixMonthsAgo && ovulationDate <= sixMonthsLater) {
+                    events.push({
+                        title: '排卵日',
+                        start: period.ovulationDate,
+                        allDay: true,
+                        classNames: ['fc-event-ovulation'],
+                        extendedProps: {
+                            type: 'ovulation'
+                        }
+                    });
+                }
+
+                // 排卵期
+                const fertileStart = new Date(period.fertileStart);
+                const fertileEnd = new Date(period.fertileEnd);
+                if (fertileStart >= sixMonthsAgo && fertileStart <= sixMonthsLater) {
+                    const current = new Date(fertileStart);
+                    while (current <= fertileEnd) {
+                        const dateStr = formatDate(current);
+                        // 避免与排卵日重复
+                        if (dateStr !== period.ovulationDate) {
+                            events.push({
+                                title: '排卵期',
+                                start: dateStr,
+                                allDay: true,
+                                classNames: ['fc-event-fertile'],
+                                extendedProps: {
+                                    type: 'fertile'
+                                }
+                            });
+                        }
+                        current.setDate(current.getDate() + 1);
+                    }
+                }
+            });
+
+            return events;
+        }
+
+        // 更新信息卡片
+        async function updateInfoCards() {
+            const data = await getData();
+
+            if (data.periods.length === 0) {
+                document.getElementById('nextPeriodDate').textContent = '-';
+                document.getElementById('ovulationDate').textContent = '-';
+                document.getElementById('fertileRange').textContent = '-';
+                document.getElementById('avgCycle').textContent = '28天';
+                return;
+            }
+
+            // 获取最近的一条记录
+            const latestPeriod = data.periods.sort((a, b) =>
+                new Date(b.startDate) - new Date(a.startDate)
+            )[0];
+
+            // 更新卡片信息
+            document.getElementById('nextPeriodDate').textContent = formatDateChinese(latestPeriod.nextPeriodDate);
+            document.getElementById('ovulationDate').textContent = formatDateChinese(latestPeriod.ovulationDate);
+            document.getElementById('fertileRange').textContent =
+                `${formatDateChinese(latestPeriod.fertileStart)} - ${formatDateChinese(latestPeriod.fertileEnd)}`;
+
+            // 计算平均周期
+            if (data.periods.length > 1) {
+                const totalCycle = data.periods.reduce((sum, p) => sum + p.cycleLength, 0);
+                const avgCycle = Math.round(totalCycle / data.periods.length);
+                document.getElementById('avgCycle').textContent = `${avgCycle}天`;
+            } else {
+                document.getElementById('avgCycle').textContent = `${latestPeriod.cycleLength}天`;
+            }
+        }
+
+        // 初始化日历
+        let calendar;
+        async function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+
+            if (calendar) {
+                calendar.destroy();
+            }
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'zh-cn',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek'
+                },
+                buttonText: {
+                    today: '今天',
+                    month: '月',
+                    week: '周'
+                },
+                events: await generateCalendarEvents(),
+                eventClick: function(info) {
+                    const type = info.event.extendedProps.type;
+                    let title = '';
+                    let message = '';
+
+                    switch(type) {
+                        case 'period':
+                            title = '月经期 🩸';
+                            message = '这是实际记录的月经期。\n注意保暖，多休息，避免剧烈运动。';
+                            break;
+                        case 'predicted':
+                            title = '预测月经期 📅';
+                            message = '这是根据上次周期预测的月经期。\n实际时间可能会有偏差，请注意观察。';
+                            break;
+                        case 'ovulation':
+                            title = '排卵日 💙';
+                            message = '这是预测的排卵日。\n是最容易受孕的一天。';
+                            break;
+                        case 'fertile':
+                            title = '排卵期（易孕期）💕';
+                            message = '这是排卵期（易孕期）。\n从排卵日前5天到排卵日后4天，共10天。';
+                            break;
+                    }
+
+                    Swal.fire({
+                        title: title,
+                        text: message,
+                        icon: 'info',
+                        confirmButtonText: '知道了'
+                    });
+                },
+                height: 'auto',
+                aspectRatio: 1.8
+            });
+
+            calendar.render();
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 尝试迁移本地数据到 Firebase
+            await migrateLocalDataToFirebase();
+
+            // 初始化日历和信息卡片
+            await initCalendar();
+            await updateInfoCards();
+        });
+    </script>
+</body>
+
+</html>
