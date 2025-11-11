@@ -1,15 +1,18 @@
-# 媒体文件（已托管在 Firebase Storage）
-assets/video/*.mp4
-assets/video/*.mov
-assets/video/*.avi
-assets/img/dataImgs/*.jpg
-assets/img/dataImgs/*.JPG
-assets/img/dataImgs/*.jpeg
-assets/img/dataImgs/*.JPEG
-assets/img/dataImgs/*.png
-assets/img/dataImgs/*.PNG
-assets/img/dataImgs/*.gif
-assets/img/dataImgs/*.GIF
+# 视频文件现在通过 Git LFS 管理
+# （已注释掉，视频文件通过 LFS 追踪）
+# assets/video/*.mp4
+# assets/video/*.mov
+# assets/video/*.avi
+
+# 图片文件也通过 Git 管理（不再使用 Firebase Storage）
+# assets/img/dataImgs/*.jpg
+# assets/img/dataImgs/*.JPG
+# assets/img/dataImgs/*.jpeg
+# assets/img/dataImgs/*.JPEG
+# assets/img/dataImgs/*.png
+# assets/img/dataImgs/*.PNG
+# assets/img/dataImgs/*.gif
+# assets/img/dataImgs/*.GIF
 
 # macOS 系统文件
 .DS_Store
