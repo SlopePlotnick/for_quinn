@@ -17,15 +17,33 @@ firebase.initializeApp(firebaseConfig);
 // 初始化 Firestore
 const db = firebase.firestore();
 
+// 初始化 Storage
+const storage = firebase.storage();
+const storageRef = storage.ref();
+
 // 数据库集合引用
 const periodsCollection = db.collection('periods');
 const diaryCollection = db.collection('diary');
+const mediaCollection = db.collection('media'); // 媒体文件元数据
+
+// Storage 路径
+const STORAGE_PATHS = {
+    photos: 'photos/',
+    videos: 'videos/',
+    secretPhotos: 'photos/secret/',
+    calendar: 'calendar/'
+};
 
 // 导出供其他文件使用
 window.firebaseDb = {
     db: db,
+    storage: storage,
+    storageRef: storageRef,
     periodsCollection: periodsCollection,
-    diaryCollection: diaryCollection
+    diaryCollection: diaryCollection,
+    mediaCollection: mediaCollection,
+    STORAGE_PATHS: STORAGE_PATHS
 };
 
-console.log('Firebase 已成功初始化！');
+console.log('Firebase 已成功初始化（包含 Storage）！');
+

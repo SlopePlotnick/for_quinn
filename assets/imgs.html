@@ -215,179 +215,132 @@
 	</style>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.3/jquery.js"></script>
+
+	<!-- Firebase SDK -->
+	<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+	<!-- Firebase 配置 -->
+	<script src="../firebase-config.js"></script>
 </head>
 
 <body>
 	<a href="../index.html" class="back-button">返回首页</a>
 	<h1 class="page-title">照片墙</h1>
 	<p class="page-subtitle">我们的回忆没有皱褶～</p>
-	<div class="wrapper">
-		<div class="card">
-			<img src="img/dataImgs/25-04-18-01.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">相册封面</h3>
-			</div>
-		</div>
-		<!-- 单个图片卡片 -->
-		<div class="card">
-			<img src="img\dataImgs\24-04-06.JPG" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">一起做了小酒窝蛋糕</h3>
-				<p class="card-description">第一次约会～</p>
-			</div>
-		</div>
-		<!-- End 单个图片卡片 -->
-		<!-- 单个图片卡片 -->
-		<div class="card">
-			<img src="img/dataImgs/24-05-01.JPG" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">漂亮的燕燕宝宝</h3>
-				<p class="card-description">最最最喜欢了</p>
-			</div>
-		</div>
-		<!-- End 单个图片卡片 -->
-		<!-- 单个图片卡片 -->
-		<div class="card">
-			<img src="img/dataImgs/24-10-25.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">唱歌ing的小坡</h3>
-				<p class="card-description">因为帅所以放了上来（</p>
-			</div>
-		</div>
-		<!-- End 单个图片卡片 -->
-		<div class="card">
-			<img src="img/dataImgs/24-10-21.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">会比耶的人型玩偶</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-11-07-01.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">大型沙发摆件</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-11-07-02.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">玩具娃娃呀</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-11-10.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">给燕燕宝宝吹头发</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-12-07.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">跟坡爸坡妈在东湖散步的时候背后偷拍的</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-12-08-01.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">坡妈送的向日葵</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-12-08-02.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">跟坡爸坡妈一起逛山姆超市</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/24-12-15.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">燕燕跟小坡一家三口一起爬山</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-02-08.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">燕燕的手机壁纸</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-04-18-02.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">蜜汁截图1</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-04-18-03.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">蜜汁截图2</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-04-18-04.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">蜜汁截图3</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-04-18-05.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">蜜汁截图4</h3>
-			</div>
-		</div>
-		<div class="card">
-			<video>
-				<source src="video/VID_20240911_211236.mp4" type="video/mp4">
-			</video>
-			<div class="card-content">
-				<h3 class="card-title">宜昌腾格尔</h3>
-				<!-- <p class="card-description">视频描述</p> -->
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-03-05-01.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">权威视角1</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-03-05-02.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">权威视角2</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-03-05-03.jpg" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">权威视角3</h3>
-			</div>
-		</div>
-		<div class="card">
-			<img src="img/dataImgs/25-04-19.png" alt="图片描述">
-			<div class="card-content">
-				<h3 class="card-title">一张见证了成长的截图</h3>
-			</div>
-		</div>
-		<div class="card">
-			<video>
-				<source src="video/VID_20241222_210842.mp4" type="video/mp4">
-			</video>
-			<div class="card-content">
-				<h3 class="card-title">疑似被南宫问雅亲了</h3>
-				<!-- <p class="card-description">视频描述</p> -->
-			</div>
-		</div>
-		<div class="card">
-			<video>
-				<source src="video/VID_20250305_172901.mp4" type="video/mp4">
-			</video>
-			<div class="card-content">
-				<h3 class="card-title">小坡上双杠</h3>
-				<!-- <p class="card-description">视频描述</p> -->
-			</div>
-		</div>
+
+	<!-- 加载提示 -->
+	<div id="loadingMessage" style="text-align: center; padding: 60px 20px; color: var(--primary-color); font-size: 18px;">
+		<p style="font-size: 48px;">💕</p>
+		<p>加载中...</p>
+	</div>
+
+	<div class="wrapper" id="mediaWrapper" style="display: none;">
+		<!-- 动态加载照片和视频 -->
 	</div>
 
 	<script type="text/javascript">
-		$(document).ready(function () {
+		let mediaCollection;
+
+		// 等待 Firebase 初始化
+		function waitForFirebase() {
+			return new Promise((resolve) => {
+				const check = setInterval(() => {
+					if (window.firebaseDb && window.firebaseDb.mediaCollection) {
+						mediaCollection = window.firebaseDb.mediaCollection;
+						clearInterval(check);
+						resolve();
+					}
+				}, 100);
+			});
+		}
+
+		// 加载媒体
+		async function loadMedia() {
+			try {
+				await waitForFirebase();
+
+				// 从 Firebase 获取媒体数据
+				const snapshot = await mediaCollection.get();
+				const mediaFiles = [];
+
+				snapshot.forEach(doc => {
+					const data = doc.data();
+					// 只加载照片墙和视频分类的内容
+					if (data.category === 'photos' || data.category === 'videos') {
+						mediaFiles.push({
+							id: doc.id,
+							...data
+						});
+					}
+				});
+
+				// 按上传时间倒序
+				mediaFiles.sort((a, b) => {
+					if (!a.uploadedAt || !b.uploadedAt) return 0;
+					return b.uploadedAt.toMillis() - a.uploadedAt.toMillis();
+				});
+
+				displayMedia(mediaFiles);
+			} catch (error) {
+				console.error('加载媒体失败:', error);
+				document.getElementById('loadingMessage').innerHTML = `
+					<p style="font-size: 48px;">😢</p>
+					<p>加载失败，请刷新页面重试</p>
+					<p style="color: #999; font-size: 14px;">${error.message}</p>
+				`;
+			}
+		}
+
+		// 显示媒体
+		function displayMedia(mediaFiles) {
+			const wrapper = document.getElementById('mediaWrapper');
+			const loadingMessage = document.getElementById('loadingMessage');
+
+			if (mediaFiles.length === 0) {
+				loadingMessage.innerHTML = `
+					<p style="font-size: 48px;">📷</p>
+					<p>还没有照片和视频哦</p>
+					<p style="color: #999; font-size: 14px;">请使用媒体管理页面上传</p>
+				`;
+				return;
+			}
+
+			// 隐藏加载提示，显示媒体网格
+			loadingMessage.style.display = 'none';
+			wrapper.style.display = 'flex';
+
+			// 生成卡片
+			mediaFiles.forEach(file => {
+				const isVideo = file.type && file.type.startsWith('video');
+				const card = document.createElement('div');
+				card.className = 'card';
+
+				// 从文件名提取标题（去掉扩展名）
+				const fileName = file.name.replace(/\.[^/.]+$/, "");
+
+				card.innerHTML = `
+					${isVideo ?
+						`<video>
+							<source src="${file.url}" type="${file.type}">
+						</video>` :
+						`<img src="${file.url}" alt="${file.name}">`
+					}
+					<div class="card-content">
+						<h3 class="card-title">${fileName}</h3>
+					</div>
+				`;
+
+				wrapper.appendChild(card);
+			});
+
+			// 绑定点击事件
+			attachClickEvents();
+		}
+
+		// 绑定点击事件
+		function attachClickEvents() {
 			$(".card img, .card video").click(function (event) {
 				var media = $(this);
 				var card = media.closest('.card');
@@ -412,7 +365,7 @@
 						<div style="margin-bottom: 20px;">
 							${mediaContent}
 						</div>
-						<p style="color: #666;">${description}</p>
+						${description ? `<p style="color: #666;">${description}</p>` : ''}
 					`,
 					width: 600,
 					confirmButtonText: '看完咯',
@@ -422,8 +375,13 @@
 						title: 'text-gradient',
 						content: 'text-gradient'
 					}
-				})
+				});
 			});
+		}
+
+		// 页面加载时初始化
+		$(document).ready(function () {
+			loadMedia();
 		});
 	</script>
 </body>
